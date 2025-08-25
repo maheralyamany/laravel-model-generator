@@ -33,3 +33,4 @@ node_modules/*
 README.md
 /public/thumbnail
 /app/Models
+/vendor
