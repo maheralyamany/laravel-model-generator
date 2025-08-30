@@ -216,6 +216,31 @@ class ClassModel extends RenderableModel
 
         return $this;
     }
+    /**
+     * @param BasePropertyModel $property
+     *
+     * @return $this
+     */
+    public function addOrReplaceProperty(BasePropertyModel $property)
+    {
+        if (!($property instanceof VirtualPropertyModel)) {
+            $oldIndex = -1;
+            for ($i = 0; $i < count($this->properties); $i++) {
+                $p = $this->properties[$i];
+
+                if ($p->getName() === $property->getName()) {
+                    $oldIndex = $i;
+                    break;
+                }
+            }
+            if ($oldIndex < 0)
+                $this->properties[] = $property;
+            else
+                $this->properties[$oldIndex] = $property;
+        }
+
+        return $this;
+    }
 
     /**
      * @return BaseMethodModel[]

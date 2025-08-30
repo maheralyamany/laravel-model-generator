@@ -4,12 +4,12 @@ namespace App\ModelGenerator\Processor;
 
 use App\CodeGenerator\Model\DocBlockModel;
 use App\CodeGenerator\Model\PropertyModel;
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Model\EloquentModel;
 
 class CustomPropertyProcessor implements ProcessorInterface
 {
-    public function process(EloquentModel $model, Config $config): void
+    public function process(EloquentModel $model, MConfig $config): void
     {
         if ($config->getNoTimestamps()) {
             $pNoTimestamps = new PropertyModel('timestamps', 'public', false);

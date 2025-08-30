@@ -2,14 +2,14 @@
 
 namespace App\ModelGenerator\Command;
 
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Helper\EmgHelper;
 use Illuminate\Support\Str;
 
 trait TablesNamespacesTrait
 {
 
-    public static function getTableNamespace($tableName,Config $config): string
+    public static function getTableNamespace($tableName,MConfig $config): string
     {
 
         if ($tableName===null || empty($tableName)) {
@@ -22,7 +22,7 @@ trait TablesNamespacesTrait
 
         return '';
     }
-    protected function resolveNamespace($tableName,Config $config): string
+    protected function resolveNamespace($tableName,MConfig $config): string
     {
         $namespace = $this->option('namespace');
         if ($namespace == null) {
@@ -34,7 +34,7 @@ trait TablesNamespacesTrait
         }
         return $namespace;
     }
-    protected function getUseNamespace($tableName,Config $config): string
+    protected function getUseNamespace($tableName,MConfig $config): string
     {
         $namespace =$config->getNamespace();
         if (is_null($tableName) || empty($tableName)) {

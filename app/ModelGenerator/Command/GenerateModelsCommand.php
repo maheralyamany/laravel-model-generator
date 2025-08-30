@@ -2,6 +2,7 @@
 
 namespace App\ModelGenerator\Command;
 
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Generator;
 use App\ModelGenerator\Helper\EmgHelper;
 use App\ModelGenerator\Helper\Prefix;
@@ -15,21 +16,24 @@ class GenerateModelsCommand extends Command
 
     protected $name = 'maheralyamany:generate:models';
 
-    public function __construct(private Generator $generator, private DatabaseManager $databaseManager)
+     public function __construct(protected Generator $generator,protected  DatabaseManager $databaseManager)
     {
+
         parent::__construct();
     }
+
 
     public function handle()
     {
         $this->emptyPath();
         $config = $this->createConfig();
+
         Prefix::setPrefix($this->databaseManager->connection($config->getConnection())->getTablePrefix());
 
         $allowTables = $this->getAllowTables();
         $skipTables = $this->option('skip-table');
         $hasCreateMethod = $this->option('has-create');
-       // dd($hasCreateMethod,$this->option('has-create'));
+        // dd($hasCreateMethod,$this->option('has-create'));
         $skipTables[] = 'migrations';
         $skipTables[] = 'personal_access_tokens';
 
@@ -39,33 +43,21 @@ class GenerateModelsCommand extends Command
                 if (in_array($tableName, $skipTables)) {
                     continue;
                 }
-                $this->generateModel($config,$tableName,$hasCreateMethod);
-
+                $this->generateModel($config, $tableName, $hasCreateMethod);
             }
         } else {
-            $schemaManager = $this->databaseManager->connection($config->getConnection())->getDoctrineSchemaManager();
-            $tables = $schemaManager->listTables();
-            foreach ($tables as $table) {
-                $tableName = Prefix::remove($table->getName());
+            //$schemaManager = $this->databaseManager->connection($config->getConnection())->getDoctrineSchemaManager();
+            $tables =  \App\Abstracts\MySqlDbPlatform::get()->getTableNames($config->getDatabaseName());
+            foreach ($tables as $tableName) {
                 if (in_array($tableName, $skipTables)) {
                     continue;
                 }
-                $this->generateModel($config,$tableName,$hasCreateMethod);
-
+                $this->generateModel($config, $tableName, $hasCreateMethod);
             }
         }
     }
 
-    protected function generateModel($config, $tableName,$hasCreateMethod){
 
-        $config->setClassName(EmgHelper::getClassNameByTableName($tableName));
-        $config->setNamespace($this->resolveNamespace($tableName,$config));
-        $config->setHasCreateMethod($hasCreateMethod);
-
-        $model = $this->generator->generateModel($config);
-        $outputFilepath =  $this->saveModel($model, $tableName, $config);
-        $this->output->writeln(sprintf("Model %s generated at \n %s", $model->getName()->getName(),$outputFilepath));
-    }
     protected function getOptions()
     {
         return array_merge(

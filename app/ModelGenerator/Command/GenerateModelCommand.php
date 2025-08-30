@@ -8,15 +8,16 @@ use App\ModelGenerator\Helper\Prefix;
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Console\Input\InputArgument;
-
+use Symfony\Component\Console\Input\InputOption;
 class GenerateModelCommand extends Command
 {
     use GenerateCommandTrait;
 
     protected $name = 'maheralyamany:generate:model';
 
-    public function __construct(private Generator $generator, private DatabaseManager $databaseManager)
+    public function __construct(protected Generator $generator, protected  DatabaseManager $databaseManager)
     {
+
         parent::__construct();
     }
 
@@ -24,14 +25,11 @@ class GenerateModelCommand extends Command
     {
         $config = $this->createConfig();
         $config->setClassName($this->argument('class-name'));
+        $hasCreateMethod = $this->option('has-create');
         Prefix::setPrefix($this->databaseManager->connection($config->getConnection())->getTablePrefix());
-        $tableName = EmgHelper::getTableNameByClassName($config->getClassName());
-        $config->setNamespace($this->resolveNamespace($tableName,$config));
-        $model = $this->generator->generateModel($config);
 
-        $this->saveModel($model, $tableName, $config);
-
-        $this->output->writeln(sprintf('Model %s generated', $model->getName()->getName()));
+        $tableName = $config->getTableName() ?? EmgHelper::getTableNameByClassName($config->getClassName());
+        $this->generateModel($config, $tableName, $hasCreateMethod);
     }
 
     protected function getArguments()
@@ -40,9 +38,16 @@ class GenerateModelCommand extends Command
             ['class-name', InputArgument::REQUIRED, 'Model class name'],
         ];
     }
-
-    protected function getOptions()
+ protected function getOptions()
     {
-        return $this->getCommonOptions();
+        return array_merge(
+            $this->getCommonOptions(),
+            [
+
+                ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', false],
+
+            ],
+        );
     }
+
 }

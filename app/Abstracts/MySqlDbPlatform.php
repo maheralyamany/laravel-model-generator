@@ -4,6 +4,7 @@ namespace App\Abstracts;
 
 use Illuminate\Support\Facades\Config as BaseConfig;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class MySqlDbPlatform
 {
@@ -28,10 +29,16 @@ class MySqlDbPlatform
     {
         return $this->castingTypeMapping;
     }
-    public function getCustomCastingTypeMapping($dataType): string|null
+    public function getCustomCastingTypeMapping($dataType): array|null
     {
+        $casts = [
 
-        return   null;
+            'longtext' => [
+                'get' => 'fn(mixed $value) =>json_decode($value)',
+                'set' => 'fn(mixed $value) => $value===null?[]:json_encode($value, true)'
+            ],
+        ];
+        return  $casts[$dataType] ?? null;
     }
     public function getStringTypeMapping(): array
     {
@@ -60,6 +67,29 @@ class MySqlDbPlatform
     {
         return 'DATABASE()';
     }
+    public static function checkDataBaseExists($database)
+    {
+        //$instance = static::get();
+        try {
+            $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =  ?";
+            $db = DB::select($query, [$database]);
+            if (empty($db)) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (\Exception $e) {
+            report($e);
+            return false;
+        }
+    }
+
+    public static function isValidConnection(string|null  $connectionName = null): string
+    {
+        $db = Schema::connection($connectionName)->getConnection()->getDatabaseName();
+        return self::checkDataBaseExists($db);
+    }
+
     private function getDatabaseName($database = null): string
     {
         if ($database == null) {
@@ -194,6 +224,35 @@ class MySqlDbPlatform
         return DB::select($query);
     }
     /**
+     * chaek table has Column
+     *
+     * @param string $table
+     * @param string $columnName
+     * @param string|null $database
+     * @return bool
+     */
+    public static function hasColumn(string $table, string $columnName, string $database = null): bool
+    {
+        $instance = static::get();
+        $database =  $instance->getDatabaseName($database);
+        $query = 'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA =' . $instance->getDatabaseNameSQL($database) . '  AND TABLE_NAME =' . $instance->quoteStringLiteral($table) . ' AND COLUMN_NAME=' . $instance->quoteStringLiteral($columnName);
+        $data = collect(DB::select($query));
+        return $data->count() > 0;
+    }
+    public static function hasTable(string $table, $database = null): bool
+    {
+        $instance = static::get();
+        $database = $instance->getDatabaseName($database);
+        try {
+            $query = "SELECT t.TABLE_NAME FROM INFORMATION_SCHEMA.TABLES t WhERE t.TABLE_SCHEMA =" . $instance->getDatabaseNameSQL($database) . "  AND t.TABLE_TYPE = 'BASE TABLE' AND t.TABLE_NAME=" . $instance->quoteStringLiteral($table);
+            $data = collect(DB::select($query));
+            return $data->count() > 0;
+        } catch (\Throwable $th) {
+            report($th);
+        }
+        return false;
+    }
+    /**
      * The SQL used for schema introspection is an implementation detail and should not be relied upon.
      *
      * {@inheritDoc}
@@ -228,7 +287,7 @@ class MySqlDbPlatform
         $columns = collect(DB::select($query));
         $grouped = $columns->mapToGroups(function ($col) {
             return [$col->Field => $col];
-        })->mapWithKeys(fn ($x, $tableName) => [
+        })->mapWithKeys(fn($x, $tableName) => [
             $tableName => $x[0],
         ]);
         /* return $columns

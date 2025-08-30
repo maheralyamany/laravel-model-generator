@@ -2,19 +2,22 @@
 
 namespace App\ModelGenerator\Command;
 
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Exception\GeneratorException;
+use App\ModelGenerator\Helper\EmgHelper;
 use App\ModelGenerator\Helper\Prefix;
 use App\ModelGenerator\Model\EloquentModel;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputOption;
-
+use App\ModelGenerator\Generator;
+use Illuminate\Database\DatabaseManager;
 trait GenerateCommandTrait
 {
     use TablesNamespacesTrait;
-    protected function createConfig(): Config
+
+    protected function createConfig(): MConfig
     {
-        return (new Config())
+        return (new MConfig())
             ->setTableName($this->option('table-name'))
             ->setNamespace($this->option('namespace'))
             ->setBaseClassName($this->option('base-class-name'))
@@ -39,8 +42,21 @@ trait GenerateCommandTrait
         }
         return $tables;
     }
-
-    protected function saveModel(EloquentModel $model, $tableName, Config $config): string
+    protected function generateModel(MConfig $config, $tableName, $hasCreateMethod)
+    {
+        try {
+            $config->setTableName($tableName);
+            $config->setClassName(EmgHelper::getClassNameByTableName($tableName));
+            $config->setNamespace($this->resolveNamespace($tableName, $config));
+            $config->setHasCreateMethod($hasCreateMethod);
+            $model = $this->generator->generateModel($config);
+            $outputFilepath =  $this->saveModel($model, $tableName, $config);
+            $this->output->writeln(sprintf("Model %s generated at \n %s", $model->getName()->getName(), $outputFilepath));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    protected function saveModel(EloquentModel $model, $tableName, MConfig $config): string
     {
 
         $content = $model->render();
@@ -65,7 +81,7 @@ trait GenerateCommandTrait
         //file_put_contents($outputFilepath, $content);
     }
 
-    protected function resolveOutputPath($tableName, Config $config): string
+    protected function resolveOutputPath($tableName, MConfig $config): string
     {
         $path = $this->option('output-path');
         if ($path === null) {

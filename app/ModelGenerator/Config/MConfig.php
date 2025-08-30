@@ -7,7 +7,7 @@ namespace App\ModelGenerator\Config;
 use Illuminate\Support\Facades\Config as BaseConfig;
 use Illuminate\Support\Facades\DB;
 
-class Config
+class MConfig
 {
     private ?string $prefix = '';
     private ?string $className = null;

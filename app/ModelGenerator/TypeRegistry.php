@@ -2,10 +2,12 @@
 
 namespace App\ModelGenerator;
 
+use App\Abstracts\MySqlDbPlatform;
 use Illuminate\Database\DatabaseManager;
 
 class TypeRegistry
 {
+    private int $isValidConnection=-1;
     protected array $types = [
         'array' => 'array',
         'simple_array' => 'array',
@@ -31,9 +33,15 @@ class TypeRegistry
 
     public function __construct(private DatabaseManager $databaseManager)
     {
-      /*   foreach ($this->types as $sqlType => $phpType) {
+
+    }
+
+    public function registerAllTypes(): void
+    {
+
+       foreach ($this->types as $sqlType => $phpType) {
             $this->registerDoctrineTypeMapping($sqlType, $phpType);
-        } */
+        }
     }
 
     public function registerType(string $sqlType, string $phpType, string $connection = null): void
@@ -50,6 +58,7 @@ class TypeRegistry
 
     private function registerDoctrineTypeMapping(string $sqlType, string $phpType, string $connection = null): void
     {
+
         $manager = $this->databaseManager->connection($connection)->getDoctrineSchemaManager();
 
         $manager->getDatabasePlatform()->registerDoctrineTypeMapping($sqlType, $phpType);

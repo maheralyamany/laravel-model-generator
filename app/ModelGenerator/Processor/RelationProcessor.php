@@ -9,7 +9,7 @@ use App\CodeGenerator\Model\MethodModel;
 use App\CodeGenerator\Model\PropertyModel;
 use App\CodeGenerator\Model\UseClassModel;
 use App\ModelGenerator\Command\TablesNamespacesTrait;
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Helper\EmgHelper;
 use App\ModelGenerator\Helper\MFormatter;
 use App\ModelGenerator\Helper\Prefix;
@@ -25,7 +25,7 @@ class RelationProcessor implements ProcessorInterface
 {
     use TablesNamespacesTrait;
     public function __construct(private DatabaseManager $databaseManager) {}
-    public function process(EloquentModel $model, Config $config): void
+    public function process(EloquentModel $model, MConfig $config): void
     {
         $schemaManager = $this->databaseManager->connection($config->getConnection())->getDoctrineSchemaManager();
         $prefixedTableName = Prefix::add($model->getTableName());
@@ -372,7 +372,7 @@ class RelationProcessor implements ProcessorInterface
         }
         return $model;
     }
-    public function addUses(EloquentModel $model, Config $config, $tableName): EloquentModel
+    public function addUses(EloquentModel $model, MConfig $config, $tableName): EloquentModel
     {
         $relationUses = $this->getUseNamespace($tableName, $config);
         if (!empty($relationUses)) {

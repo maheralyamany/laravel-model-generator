@@ -4,7 +4,7 @@ namespace App\ModelGenerator\Processor;
 
 use App\CodeGenerator\Model\DocBlockModel;
 use App\CodeGenerator\Model\PropertyModel;
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Helper\Prefix;
 use App\ModelGenerator\Model\EloquentModel;
 use App\ModelGenerator\TypeRegistry;
@@ -15,7 +15,7 @@ class CustomPrimaryKeyProcessor implements ProcessorInterface
     public function __construct(private DatabaseManager $databaseManager, private TypeRegistry $typeRegistry)
     {}
 
-    public function process(EloquentModel $model, Config $config): void
+    public function process(EloquentModel $model, MConfig $config): void
     {
 
         $schemaManager = $this->databaseManager->connection($config->getConnection())->getDoctrineSchemaManager();

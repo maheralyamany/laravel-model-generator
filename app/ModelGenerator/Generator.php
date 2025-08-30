@@ -2,7 +2,7 @@
 
 namespace App\ModelGenerator;
 
-use App\ModelGenerator\Config\Config;
+use App\ModelGenerator\Config\MConfig;
 use App\ModelGenerator\Model\EloquentModel;
 use App\ModelGenerator\Processor\ProcessorInterface;
 use IteratorAggregate;
@@ -26,7 +26,7 @@ class Generator
         }
     }
 
-    public function generateModel(Config $config): EloquentModel
+    public function generateModel(MConfig $config): EloquentModel
     {
         $model = new EloquentModel();
 
