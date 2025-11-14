@@ -20,7 +20,7 @@ class ModelGeneratorServiceProvider extends ServiceProvider
     public const PROCESSOR_TAG = 'model_generator.processor';
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/config/model_generator.php', 'model_generator');
+        $this->mergeConfigFrom(__DIR__ . '/../config/model_generator.php', 'model_generator');
         $this->app->singleton('db.mmanager', fn($app) => new MDbManager($app['db']));
         $this->app->alias('db.mmanager', MDbManager::class);
         $this->app->singleton(MDbManager::class, fn($app) => $app['db.mmanager']);
@@ -46,9 +46,9 @@ class ModelGeneratorServiceProvider extends ServiceProvider
     public function boot()
     {
         // Publish config
-       /*  $this->publishes([
-            __DIR__ . '/config/model_generator.php' => config_path('model_generator.php'),
-        ], 'model_generator'); */
+        $this->publishes([
+            __DIR__ . '/../config/model_generator.php' => config_path('model_generator.php'),
+        ], 'model_generator');
         Event::listen(CommandStarting::class, [GenerateCommandEventListener::class, 'handle']);
     }
 }
