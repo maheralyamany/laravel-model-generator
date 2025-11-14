@@ -46,9 +46,9 @@ class ModelGeneratorServiceProvider extends ServiceProvider
     public function boot()
     {
         // Publish config
-        $this->publishes([
+       /*  $this->publishes([
             __DIR__ . '/config/model_generator.php' => config_path('model_generator.php'),
-        ], 'model_generator');
+        ], 'model_generator'); */
         Event::listen(CommandStarting::class, [GenerateCommandEventListener::class, 'handle']);
     }
 }
