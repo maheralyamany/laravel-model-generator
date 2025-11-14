@@ -20,7 +20,7 @@ class GenerateCommandEventListener
             return;
         }
         $this->typeRegistry->registerAllTypes();
-        $userTypes = config('model_generator.db_types', []);
+        $userTypes = config('model_generator.db_types', [])??[];
 
         foreach ($userTypes as $type => $value) {
             $this->typeRegistry->registerType($type, $value);
