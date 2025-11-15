@@ -8,7 +8,7 @@ Laravel Model Generator generates Eloquent models using database schema as a sou
 ## Installation
 Step 1. Add Laravel Model Generator to your project:
 ```
-composer require maheralyamany/laravel-model-generator
+composer require maheralyamany/laravel-model-generator --dev
 ```
 Step 2. Register `ModelGeneratorServiceProvider`:
 
