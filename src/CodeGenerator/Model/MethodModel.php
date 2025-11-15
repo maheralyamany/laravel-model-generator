@@ -1,17 +1,17 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\CodeGenerator\Exception\ValidationException;
-use MaherAlyamany\CodeGenerator\Model\Traits\AbstractModifierTrait;
-use MaherAlyamany\CodeGenerator\Model\Traits\AccessModifierTrait;
-use MaherAlyamany\CodeGenerator\Model\Traits\DocBlockTrait;
-use MaherAlyamany\CodeGenerator\Model\Traits\FinalModifierTrait;
-use MaherAlyamany\CodeGenerator\Model\Traits\StaticModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\ValidationException;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\AbstractModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\AccessModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\FinalModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\StaticModifierTrait;
 
 /**
  * Class PHPClassMethod
- * @package MaherAlyamany\CodeGenerator\Model
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
  */
 class MethodModel extends BaseMethodModel
 {

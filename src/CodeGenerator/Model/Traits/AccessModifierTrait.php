@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model\Traits;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits;
 
 /**
  * Trait AccessModifierTrait
- * @package MaherAlyamany\CodeGenerator\Model\Traits
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits
  */
 trait AccessModifierTrait
 {

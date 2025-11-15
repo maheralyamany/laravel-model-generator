@@ -1,18 +1,18 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
 
 
-use MaherAlyamany\CodeGenerator\Exception\GeneratorException;
-use MaherAlyamany\CodeGenerator\Model\Traits\DocBlockTrait;
-use MaherAlyamany\CodeGenerator\RenderableModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\GeneratorException;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\RenderableModel;
 use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
 use MaherAlyamany\ModelGenerator\Model\Relation;
 use MaherAlyamany\ModelGenerator\Schema\MDbManager;
 
 /**
  * Class ClassModel
- * @package MaherAlyamany\CodeGenerator\Model
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
  */
 class ClassModel extends RenderableModel
 {

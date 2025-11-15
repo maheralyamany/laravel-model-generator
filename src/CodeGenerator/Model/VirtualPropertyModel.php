@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\CodeGenerator\Exception\ValidationException;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\ValidationException;
 
 /**
  * Class VirtualPropertyModel
- * @package MaherAlyamany\CodeGenerator\Model
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
  */
 class VirtualPropertyModel extends BasePropertyModel
 {

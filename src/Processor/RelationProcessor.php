@@ -2,12 +2,12 @@
 
 namespace MaherAlyamany\ModelGenerator\Processor;
 
-use MaherAlyamany\CodeGenerator\Model\ArgumentModel;
-use MaherAlyamany\CodeGenerator\Model\BaseMethodModel;
-use MaherAlyamany\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\CodeGenerator\Model\UseClassModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ArgumentModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\BaseMethodModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseClassModel;
 use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
 use MaherAlyamany\ModelGenerator\Command\TablesNamespacesTrait;
 use MaherAlyamany\ModelGenerator\Config\MConfig;

@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Exception;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Exception;
 
 /**
  * Class ValidationException
- * @package MaherAlyamany\CodeGenerator\Exception
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Exception
  */
 class ValidationException extends \Exception
 

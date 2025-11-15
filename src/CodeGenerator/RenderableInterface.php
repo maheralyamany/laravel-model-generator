@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator;
 
 /**
  * Interface RenderableInterface
- * @package MaherAlyamany\CodeGenerator
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator
  */
 interface RenderableInterface
 {
