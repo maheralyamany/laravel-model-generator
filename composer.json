@@ -1,7 +1,6 @@
 {
   "name": "maheralyamany/laravel-model-generator",
   "description": "Generate Laravel models from database tables with relationships",
-  "version": "1.1.1",
   "type": "library",
   "license": "MIT",
   "autoload": {
