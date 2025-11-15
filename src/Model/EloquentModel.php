@@ -1,13 +1,13 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Model;
+namespace ModelGenerator\Model;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ClassModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
-use MaherAlyamany\ModelGenerator\Exception\GeneratorException;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
+use ModelGenerator\CodeGenerator\Model\ClassModel;
+use ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use ModelGenerator\CodeGenerator\Model\MethodModel;
+use ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
+use ModelGenerator\Exception\GeneratorException;
+use ModelGenerator\Helper\MgHelper;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as EloquentBelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as EloquentBelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany as EloquentHasMany;
@@ -86,45 +86,45 @@ class EloquentModel extends ClassModel
     {
         $reflectionObject = new \ReflectionObject($relation);
         $name = Str::camel($reflectionObject->getShortName());
-        $refName = /* $this->getNamespace()->getNamespace() . '\\' .  */ EmgHelper::getClassNameByTableName($relation->getTableName()) . '::class';
+        $refName = /* $this->getNamespace()->getNamespace() . '\\' .  */ MgHelper::getClassNameByTableName($relation->getTableName()) . '::class';
         $arguments = [];
 
         if ($relation instanceof BelongsToMany) {
-            $defaultJoinTableName = EmgHelper::getDefaultJoinTableName(
+            $defaultJoinTableName = MgHelper::getDefaultJoinTableName(
                 $this->getTableName(),
                 $relation->getTableName()
             );
             $joinTableName = $relation->getJoinTable() === $defaultJoinTableName
                 ? null
-                : EmgHelper::getClassNameByTableName($relation->getJoinTable()) . '::class';
+                : MgHelper::getClassNameByTableName($relation->getJoinTable()) . '::class';
             $arguments[] = $joinTableName;
 
             $arguments[] = $this->resolveArgument(
                 $relation->getForeignColumnName(),
-                EmgHelper::getDefaultForeignColumnName($this->getTableName())
+                MgHelper::getDefaultForeignColumnName($this->getTableName())
             );
             $arguments[] = $this->resolveArgument(
                 $relation->getLocalColumnName(),
-                EmgHelper::getDefaultForeignColumnName($relation->getTableName())
+                MgHelper::getDefaultForeignColumnName($relation->getTableName())
             );
-            /*  dd([$relation->getLocalColumnName(), EmgHelper::getDefaultForeignColumnName($relation->getTableName())]); */
+            /*  dd([$relation->getLocalColumnName(), MgHelper::getDefaultForeignColumnName($relation->getTableName())]); */
         } elseif ($relation instanceof HasMany) {
             $arguments[] = $this->resolveArgument(
                 $relation->getForeignColumnName(),
-                EmgHelper::getDefaultForeignColumnName($this->getTableName())
+                MgHelper::getDefaultForeignColumnName($this->getTableName())
             );
             $arguments[] = $this->resolveArgument(
                 $relation->getLocalColumnName(),
-                EmgHelper::DEFAULT_PRIMARY_KEY
+                MgHelper::DEFAULT_PRIMARY_KEY
             );
         } else {
             $arguments[] = $this->resolveArgument(
                 $relation->getForeignColumnName(),
-                EmgHelper::getDefaultForeignColumnName($relation->getTableName())
+                MgHelper::getDefaultForeignColumnName($relation->getTableName())
             );
             $arguments[] = $this->resolveArgument(
                 $relation->getLocalColumnName(),
-                EmgHelper::DEFAULT_PRIMARY_KEY
+                MgHelper::DEFAULT_PRIMARY_KEY
             );
         }
 
@@ -162,6 +162,6 @@ class EloquentModel extends ClassModel
     protected function resolveArgument(string $actual, string $default): ?string
     {
         // return $actual === $default ? null : $actual;
-        return $actual === EmgHelper::DEFAULT_PRIMARY_KEY ? null : $actual;
+        return $actual === MgHelper::DEFAULT_PRIMARY_KEY ? null : $actual;
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Processor;
+namespace ModelGenerator\Processor;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\NamespaceModel;
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
+use ModelGenerator\CodeGenerator\Model\NamespaceModel;
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Model\EloquentModel;
 
 class NamespaceProcessor implements ProcessorInterface
 {

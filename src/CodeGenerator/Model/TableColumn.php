@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
+namespace ModelGenerator\CodeGenerator\Model;
 
 class TableColumn
 {

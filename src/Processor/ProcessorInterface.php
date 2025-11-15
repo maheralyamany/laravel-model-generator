@@ -1,9 +1,9 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Processor;
+namespace ModelGenerator\Processor;
 
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Model\EloquentModel;
 
 interface ProcessorInterface
 {

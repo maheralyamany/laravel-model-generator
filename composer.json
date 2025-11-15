@@ -1,18 +1,18 @@
 {
   "name": "maheralyamany/laravel-model-generator",
   "description": "Generate Laravel models from database tables with relationships",
-  "type": "library",
+  "keywords": [
+    "Maher Alyamany",
+    "MaherAlyamany",
+    "maheralyamany",
+    "laravel",
+    "model generator"
+  ],
+  "support": {
+    "issues": "https://github.com/maheralyamany/laravel-model-generator/issues",
+    "source": "https://github.com/maheralyamany/laravel-model-generator"
+  },
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "MaherAlyamany\\ModelGenerator\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "MaherAlyamany\\Tests\\Integration\\": "tests/integration"
-    }
-  },
   "authors": [
     {
       "name": "Maher Alyamany",
@@ -20,21 +20,38 @@
     }
   ],
   "require": {
-    "php": "^8.2",
-    
-    "illuminate/database": "^10.0|^11.0",
-    "illuminate/support": "^10.0|^11.0",
-    "illuminate/config": "^10.0|^11.0",
-    "illuminate/console": "^10.0|^11.0",
-    "doctrine/dbal": "^3.1.5"
+    "php": ">=8.1",
+    "laravel/framework": ">=10.10",
+    "doctrine/dbal": ">=3.1.5",
+    "illuminate/support": ">=10.0",
+    "illuminate/database": ">=10.0",
+    "illuminate/contracts": ">=10.0",
+    "illuminate/filesystem": ">=10.0",
+    "illuminate/console": ">=10.0",
+    "illuminate/config": ">=10.0"
   },
   "require-dev": {
+    "fakerphp/faker": "^1.9.1",
+    "mockery/mockery": ">=1.4",
     "phpunit/phpunit": "^10.5.58"
+  },
+  "autoload": {
+    "psr-4": {
+      "ModelGenerator\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/TestCase.php"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist"
   },
   "extra": {
     "laravel": {
       "providers": [
-        "MaherAlyamany\\ModelGenerator\\ModelGeneratorServiceProvider"
+        "ModelGenerator\\ModelGeneratorServiceProvider"
       ]
     }
   }

@@ -1,8 +1,8 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Helper;
+namespace ModelGenerator\Helper;
 
-class MFormatter
+class MgFormatter
 {
 	private $lines = [];
 

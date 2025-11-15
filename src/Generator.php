@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator;
+namespace ModelGenerator;
 
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
-use MaherAlyamany\ModelGenerator\Processor\ProcessorInterface;
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Model\EloquentModel;
+use ModelGenerator\Processor\ProcessorInterface;
 use IteratorAggregate;
 
 class Generator

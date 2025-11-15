@@ -7,17 +7,33 @@ Laravel Model Generator generates Eloquent models using database schema as a sou
 
 ## Installation
 Step 1. Add Laravel Model Generator to your project:
-```
+``` shell
 composer require maheralyamany/laravel-model-generator --dev
 ```
-Step 2. Register `ModelGeneratorServiceProvider`:
 
-```php
-'providers' => [
-    // ...
-    MaherAlyamany\ModelGenerator\ModelGeneratorServiceProvider::class,
-];
+Add the `model-generator.php` configuration file to your `config` directory and clear the config cache:
+
+```shell
+php artisan vendor:publish --tag=model-generator
+
+# Let's refresh our config cache just in case
+php artisan config:clear
 ```
+Step 2. Register `ModelGeneratorServiceProvider`:
+Insert ModelGenerator\ModelGeneratorServiceProvider::class into "providers" section of /config/app.php
+
+or paste into `AppServiceProvider::register()`
+```php
+<?php
+
+public function register()
+    {
+        if ($this->app->environment() === 'local' && class_exists(\ModelGenerator\ModelGeneratorServiceProvider::class)) {
+            $this->app->register(\ModelGenerator\ModelGeneratorServiceProvider::class);
+        }
+    }
+```
+
 
 Step 3. Configure your database connection.
 
@@ -25,7 +41,7 @@ Step 3. Configure your database connection.
 
 Use
 
-```
+```shell
 php artisan maheralyamany:generate:model User
 ```
 
@@ -35,7 +51,7 @@ to generate a model class. Generator will look for table named `users` and gener
 
 Use `table-name` option to specify another table name:
 
-```
+```shell
 php artisan maheralyamany:generate:model Cache --table-name=cache
 ```
 
@@ -45,10 +61,10 @@ In this case generated model will contain `protected $table = 'user'` property.
 
 Generated file will be saved into `app/Models` directory of your application and have `App\Models` namespace by default. If you want to change the destination and namespace, supply the `output-path` and `namespace` options respectively:
 
-```
+```shell
 php artisan maheralyamany:generate:model User --output-path=/full/path/to/output/directory --namespace=Your\\Custom\\Models\\Place
 ```
-```
+```shell
 php artisan maheralyamany:generate:models  --allow-tables='table_name'  --has-create='true' 
 
 php artisan maheralyamany:generate:models  --allow-tables='table_name'  --has-create='true' 
@@ -65,7 +81,7 @@ php artisan maheralyamany:generate:models   --has-create='false'
 
 By default, generated class will be extended from `Illuminate\Database\Eloquent\Model`. To change the base class specify `base-class-name` option:
 
-```
+```shell
 php artisan maheralyamany:generate:model User --base-class-name=Custom\\Base\\Model
 ```
 
@@ -73,7 +89,7 @@ php artisan maheralyamany:generate:model User --base-class-name=Custom\\Base\\Mo
 
 If `User.php` file already exist, it will be renamed into `User.php~` first and saved at the same directory. Unless `no-backup` option is specified:
 
-```
+```shell
 php artisan maheralyamany:generate:model User --no-backup
 ```
 
@@ -87,20 +103,24 @@ There are several useful options for defining several model's properties:
 
 ### Overriding default options
 
-Instead of specifying options each time when executing the command you can create a config file named `model_generator.php` at project's `config` directory with your own default values:
+Instead of specifying options each time when executing the command you can create a config file named `model-generator.php` at project's `config` directory with your own default values:
 
 ```php
 <?php
 
 return [
-  'namespace' => 'App',
-  'base_class_name' => \Illuminate\Database\Eloquent\Model::class,
-  'output_path' => null,
-  'no_timestamps' => null,
-  'date_format' => null,
-  'connection' => null,
-  'no_backup' => null,
-  'db_types' => null,
+    'output_path' => app_path('Models'),
+    'namespace' => 'App\Models',
+    'base_class_name' => \Illuminate\Database\Eloquent\Model::class,
+    'no_timestamps' => false,
+    'date_format' => 'Y-m-d H:i:s',
+    'connection' => null,
+    'no_backup' => null,
+    'db_types' => [],
+    'except' => [
+      'migrations',
+      'personal_access_tokens',
+      ],
 ];
 ```
 
@@ -113,9 +133,9 @@ If running a command leads to an error
 Unknown database type <TYPE> requested, Doctrine\DBAL\Platforms\MySqlPlatform may not support it.
 ```
 
-it means that you must register your type `<TYPE>` at your `config/model_generator.php`:
+it means that you must register your type `<TYPE>` at your `config/model-generator.php`:
 
-```
+```php
 return [
     // ...
     'db_types' => [
@@ -142,7 +162,7 @@ CREATE TABLE `users` (
 
 Command:
 
-```
+```shell
 php artisan maheralyamany:generate:model User
 ```
 
@@ -199,21 +219,22 @@ class User extends Model
 
 ## Generating models for all tables
 
-Command `maheralyamany:generate:models` will generate models for all tables in the database. It accepts all options available for `maheralyamany:generate:model` along with `skip-table` option.
+Command `maheralyamany:generate:models` will generate models for all tables in the database. It accepts all options available for `maheralyamany:generate:model` along with `skip-tables` option.
 
-### skip-table
+### skip-tables
 
 Specify one or multiple table names to skip:
 
-```
+
 
 Note that table names must be specified without prefix if you have one configured.
 
 ## Customization
 
-You can hook into the process of model generation by adding your own instances of `MaherAlyamany\ModelGenerator\Processor\ProcessorInterface` and tagging it with `ModelGeneratorServiceProvider::PROCESSOR_TAG`.
+You can hook into the process of model generation by adding your own instances of `ModelGenerator\Processor\ProcessorInterface` and tagging it with `ModelGeneratorServiceProvider::PROCESSOR_TAG`.
 
 Imagine you want to override Eloquent's `perPage` property value.
+
 
 ```php
 class PerPageProcessor implements ProcessorInterface

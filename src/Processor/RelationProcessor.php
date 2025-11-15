@@ -1,35 +1,35 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Processor;
+namespace ModelGenerator\Processor;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ArgumentModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\BaseMethodModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseClassModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
-use MaherAlyamany\ModelGenerator\Command\TablesNamespacesTrait;
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
-use MaherAlyamany\ModelGenerator\Helper\MFormatter;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
-use MaherAlyamany\ModelGenerator\Model\BelongsTo;
-use MaherAlyamany\ModelGenerator\Model\BelongsToMany;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
-use MaherAlyamany\ModelGenerator\Model\HasMany;
-use MaherAlyamany\ModelGenerator\Model\HasOne;
-use MaherAlyamany\ModelGenerator\Model\Relation;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\CodeGenerator\Model\ArgumentModel;
+use ModelGenerator\CodeGenerator\Model\BaseMethodModel;
+use ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use ModelGenerator\CodeGenerator\Model\MethodModel;
+use ModelGenerator\CodeGenerator\Model\PropertyModel;
+use ModelGenerator\CodeGenerator\Model\UseClassModel;
+use ModelGenerator\CodeGenerator\Model\TableColumn;
+
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Helper\MgHelper;
+use ModelGenerator\Helper\MgFormatter;
+use ModelGenerator\Helper\MgPrefix;
+use ModelGenerator\Model\BelongsTo;
+use ModelGenerator\Model\BelongsToMany;
+use ModelGenerator\Model\EloquentModel;
+use ModelGenerator\Model\HasMany;
+use ModelGenerator\Model\HasOne;
+use ModelGenerator\Model\Relation;
+use ModelGenerator\Illuminate\MDbManager;
 
 class RelationProcessor implements ProcessorInterface
 {
-    use TablesNamespacesTrait;
+
     public function __construct(private MDbManager $mDbManager) {}
     public function process(EloquentModel $model, MConfig $config): void
     {
         $schemaManager = $this->mDbManager->connection($config->getConnection())->getDoctrineSchemaManager();
-        $prefixedTableName = Prefix::add($model->getTableName());
+        $prefixedTableName = MgPrefix::add($model->getTableName());
         $tables = $schemaManager->listTables();
         $moveRelations = [];
         foreach ($tables as $table) {
@@ -42,7 +42,7 @@ class RelationProcessor implements ProcessorInterface
                 $isCascade = ($foreignKey->onDelete() == 'CASCADE');
                 if ($table->getName() === $prefixedTableName) {
                     $relation = new BelongsTo(
-                        Prefix::remove($foreignKey->getForeignTableName()),
+                        MgPrefix::remove($foreignKey->getForeignTableName()),
                         $foreignKey->getLocalColumns()[0],
                         $foreignKey->getForeignColumns()[0]
                     );
@@ -53,7 +53,7 @@ class RelationProcessor implements ProcessorInterface
                     if (count($foreignKeys) === 2 && count($table->getColumns()) === 2) {
                         $keys = array_keys($foreignKeys);
                         $key = array_search($name, $keys) === 0 ? 1 : 0;
-                        $tableName = Prefix::remove($table->getName());
+                        $tableName = MgPrefix::remove($table->getName());
                         $foreignColumn = $localColumns[0];
                         $localColumn = $foreignKey->getForeignColumns()[0];
                         $mrelation = new HasMany($tableName, $foreignColumn, $localColumn);
@@ -63,7 +63,7 @@ class RelationProcessor implements ProcessorInterface
 
                         $secondForeignKey = $foreignKeys[$keys[$key]];
                         $localColumn =  $secondForeignKey->getLocalColumns()[0];
-                        $secondForeignTable = Prefix::remove($secondForeignKey->getForeignTableName());
+                        $secondForeignTable = MgPrefix::remove($secondForeignKey->getForeignTableName());
                         $relation = new BelongsToMany($secondForeignTable, $tableName, $foreignColumn, $localColumn);
                         $relation->setPrefix($config->getPrefix());
                         $this->addUses($model, $config, $secondForeignTable);
@@ -71,10 +71,10 @@ class RelationProcessor implements ProcessorInterface
                         $moveRelations = $model->addRelation($relation, $moveRelations, $isCascade);
                         break;
                     } else {
-                        $tableName = Prefix::remove($table->getName());
+                        $tableName = MgPrefix::remove($table->getName());
                         $foreignColumn = $localColumns[0];
                         $localColumn = $foreignKey->getForeignColumns()[0];
-                        if (EmgHelper::isColumnUnique($table, $foreignColumn)) {
+                        if (MgHelper::isColumnUnique($table, $foreignColumn)) {
                             $relation = new HasOne($tableName, $foreignColumn, $localColumn);
                         } else {
                             $relation = new HasMany($tableName, $foreignColumn, $localColumn);
@@ -101,7 +101,7 @@ class RelationProcessor implements ProcessorInterface
         $primary = $model->getPrimaryKeyColumn();
         $this->getDynamicContent($model);
         $dynamicContent = $model->getCreateOrUpdate();
-        $formatter = new MFormatter();
+        $formatter = new MgFormatter();
         $space = 3;
         $formatter->line('try {');
         $formatter->line("%%BaseVariables%%", $space);
@@ -119,7 +119,7 @@ class RelationProcessor implements ProcessorInterface
         $end = '%%';
         foreach ($dynamicContent as $name => $vars) {
             $replace = $start . $name . $end;
-            $stub = MFormatter::replace(' ', $replace, $vars, $stub);
+            $stub = MgFormatter::replace(' ', $replace, $vars, $stub);
         }
         $method = new MethodModel("createOrUpdate");
         $method->addArgument(new ArgumentModel('request'));
@@ -159,9 +159,9 @@ class RelationProcessor implements ProcessorInterface
     {
         $columns = $model->getTableColumns();
         if (count($columns) > 0) {
-            $storeInputs = new MFormatter();
-            $baseVariables = new MFormatter();
-            $updateInputs = new MFormatter();
+            $storeInputs = new MgFormatter();
+            $baseVariables = new MgFormatter();
+            $updateInputs = new MgFormatter();
             $storeInputs->line('$item = static::Create([', 1);
             foreach ($columns as $col) {
                 if ($col->Extra != 'auto_increment' && $col->Field != 'deleted_at') {
@@ -199,7 +199,7 @@ class RelationProcessor implements ProcessorInterface
 
     public function addUses(EloquentModel $model, MConfig $config, $tableName): EloquentModel
     {
-        $relationUses = $this->getUseNamespace($tableName, $config);
+        $relationUses = $config->getUseNamespace($tableName);
         if (!empty($relationUses)) {
             $model->addUses(new UseClassModel(ltrim($relationUses, '\\')));
         }

@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
+namespace ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\RenderableModel;
+use ModelGenerator\CodeGenerator\RenderableModel;
 
 /**
  * Class BaseMethodModel
- * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
+ * @package ModelGenerator\CodeGenerator\Model
  */
 abstract class BaseMethodModel extends RenderableModel
 {

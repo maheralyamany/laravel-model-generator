@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MaherAlyamany\ModelGenerator\Schema;
+namespace ModelGenerator\Illuminate;
 
 use Illuminate\Database\Connection;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\Config as BaseConfig;
 use Illuminate\Support\Facades\DB;
+
 abstract class AbstractMSchemaManager
 {
   protected $doctrineTypeMapping;
@@ -15,47 +17,13 @@ abstract class AbstractMSchemaManager
   protected $dateTypeMapping;
   protected $numberTypeMapping;
   protected $default_database;
-   /**
-     * Holds instance of the Doctrine connection for this schema manager.
-     *
-     * @var Connection
-     */
-    protected $_conn;
-  public function __construct(?Connection $connection=null)
+
+  public function __construct()
   {
-      $this->_conn     = $connection?? DB::connection();
+
     $this->initializeDoctrineTypeMappings();
   }
-  abstract public static function get(): self;
-  abstract public  function checkDataBaseExists($database): bool;
-  abstract public  function isValidConnection(string|null  $connectionName = null): string;
-  abstract  public function getCurrentDatabaseExpression(): string;
-  abstract public function getListDatabasesSQL();
-  abstract public function getListTableConstraintsSQL($table);
-  abstract public function getTableNames($database = null);
-  abstract public function getListTableIndexesSQL($table, $database = null);
-  abstract public function getListTableIndexes($table, $database = null);
-  abstract public function getListViewsSQL($database);
-  abstract public function getListTableForeignKeysSQL($table, $database = null);
-  abstract public function getListTableRelatedKeysSQL($table, $database = null);
-  abstract public function getListTableRelatedKeys($table, $database = null);
-  abstract public function getListTableForeignKeys($table, $database = null);
-  abstract public function getListTablesSQL();
-  abstract public function getListTableColumnsSQL($table, $database = null);
-  abstract public function getListTableColumns($table, $database = null);
-  abstract public function getGroupedListTableColumns($table, $database = null);
-  abstract public function getListTableMetadataSQL(string $table, ?string $database = null): string;
-  abstract public function getListTableMetadata(string $table, ?string $database = null);
-  /**
-   * chaek table has Column
-   *
-   * @param string $table
-   * @param string $columnName
-   * @param string|null $database
-   * @return bool
-   */
-  abstract  public  function hasColumn(string $table, string $columnName, string $database = null): bool;
-  abstract public  function hasTable(string $table, $database = null): bool;
+ 
   public function getDoctrineTypeMapping(): array
   {
     return $this->doctrineTypeMapping;

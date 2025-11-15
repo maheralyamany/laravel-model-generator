@@ -1,14 +1,14 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Processor;
+namespace ModelGenerator\Processor;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
-use MaherAlyamany\ModelGenerator\TypeRegistry;
+use ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use ModelGenerator\CodeGenerator\Model\PropertyModel;
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Helper\MgPrefix;
+use ModelGenerator\Model\EloquentModel;
+use ModelGenerator\Illuminate\MDbManager;
+use ModelGenerator\TypeRegistry;
 
 
 class CustomPrimaryKeyProcessor implements ProcessorInterface
@@ -21,7 +21,7 @@ class CustomPrimaryKeyProcessor implements ProcessorInterface
 
         $schemaManager = $this->mDbManager->connection($config->getConnection())->getDoctrineSchemaManager();
 
-        $tableDetails = $schemaManager->listTableDetails(Prefix::add($model->getTableName()));
+        $tableDetails = $schemaManager->listTableDetails(MgPrefix::add($model->getTableName()));
         $primaryKey = $tableDetails->getPrimaryKey();
         if ($primaryKey === null) {
             return;

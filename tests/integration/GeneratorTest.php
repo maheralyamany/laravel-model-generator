@@ -1,22 +1,22 @@
 <?php
 
-namespace Krlove\Tests\Integration;
+namespace ModelGenerator\Tests\Integration;
 
 use Illuminate\Database\Connectors\SQLiteConnector;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\SQLiteConnection;
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Generator;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
-use MaherAlyamany\ModelGenerator\Processor\CustomPrimaryKeyProcessor;
-use MaherAlyamany\ModelGenerator\Processor\CustomPropertyProcessor;
-use MaherAlyamany\ModelGenerator\Processor\FieldProcessor;
-use MaherAlyamany\ModelGenerator\Processor\NamespaceProcessor;
-use MaherAlyamany\ModelGenerator\Processor\RelationProcessor;
-use MaherAlyamany\ModelGenerator\Processor\TableNameProcessor;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
-use MaherAlyamany\ModelGenerator\TypeRegistry;
+use ModelGenerator\Config\MConfig;
+use ModelGenerator\Generator;
+
+use ModelGenerator\Processor\CustomPrimaryKeyProcessor;
+use ModelGenerator\Processor\CustomPropertyProcessor;
+use ModelGenerator\Processor\FieldProcessor;
+use ModelGenerator\Processor\NamespaceProcessor;
+use ModelGenerator\Processor\RelationProcessor;
+use ModelGenerator\Processor\TableNameProcessor;
+use ModelGenerator\Illuminate\MDbManager;
+use ModelGenerator\TypeRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

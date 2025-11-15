@@ -1,6 +1,6 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Exception;
+namespace ModelGenerator\Exception;
 
 class GeneratorException extends \Exception
 

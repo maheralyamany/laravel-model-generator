@@ -3,3 +3,4 @@
 composer.lock
 .phpunit.result.cache
 .git_commands.md
+.phpunit.cache/test-results

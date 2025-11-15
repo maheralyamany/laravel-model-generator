@@ -1,16 +1,16 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
+namespace ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\AccessModifierTrait;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\StaticModifierTrait;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\ValueTrait;
+use ModelGenerator\CodeGenerator\Model\Traits\AccessModifierTrait;
+use ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
+use ModelGenerator\CodeGenerator\Model\Traits\StaticModifierTrait;
+use ModelGenerator\CodeGenerator\Model\Traits\ValueTrait;
 
 /**
 
  * Class PHPClassProperty
- * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
+ * @package ModelGenerator\CodeGenerator\Model
  */
 class PropertyModel extends BasePropertyModel
 {

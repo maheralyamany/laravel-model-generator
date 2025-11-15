@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Command;
+namespace ModelGenerator\Command;
 
-use MaherAlyamany\ModelGenerator\Generator;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
+use ModelGenerator\Generator;
+use ModelGenerator\Helper\MgHelper;
+use ModelGenerator\Helper\MgPrefix;
 use Illuminate\Console\Command;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\Illuminate\MDbManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 class GenerateModelCommand extends Command
@@ -25,11 +25,11 @@ class GenerateModelCommand extends Command
     {
         $config = $this->createConfig();
         $config->setClassName($this->argument('class-name'));
-        $hasCreateMethod = $this->option('has-create');
-        Prefix::setPrefix($this->mDbManager->connection($config->getConnection())->getTablePrefix());
+       
+        MgPrefix::setPrefix($this->mDbManager->connection($config->getConnection())->getTablePrefix());
 
-        $tableName = $config->getTableName() ?? EmgHelper::getTableNameByClassName($config->getClassName());
-        $this->generateModel($config, $tableName, $hasCreateMethod);
+        $tableName = $config->getTableName() ?? MgHelper::getTableNameByClassName($config->getClassName());
+        $this->generateModel($config, $tableName);
     }
 
     protected function getArguments()
@@ -43,9 +43,6 @@ class GenerateModelCommand extends Command
         return array_merge(
             $this->getCommonOptions(),
             [
-
-                ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', false],
-
             ],
         );
     }

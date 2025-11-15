@@ -1,11 +1,11 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Model;
+namespace ModelGenerator\Model;
 
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
+use ModelGenerator\Helper\MgHelper;
+use ModelGenerator\Helper\MgPrefix;
 use Illuminate\Support\Str;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
+use ModelGenerator\CodeGenerator\Model\TableColumn;
 
 abstract class Relation
 {
@@ -24,7 +24,7 @@ abstract class Relation
 
     public function __construct(string $tableName, string $joinColumnName, string $localColumnName)
     {
-        // Prefix::removeRelation($relation->getTableName(),$prefix)
+        // MgPrefix::removeRelation($relation->getTableName(),$prefix)
         $this->setTableName($tableName);
         $this->setForeignColumnName($joinColumnName);
         $this->setLocalColumnName($localColumnName);
@@ -32,7 +32,7 @@ abstract class Relation
         /*  if (($joinColumnName == 'doc_mst_id') || ($localColumnName == 'doc_mst_id')) {
             dd($this);
         } */
-        $relatedClass = EmgHelper::getClassNameByTableName($tableName);
+        $relatedClass = MgHelper::getClassNameByTableName($tableName);
         $this->setRelatedClass($relatedClass);
     }
 
@@ -57,7 +57,7 @@ abstract class Relation
             return $this->relationMethodName;
         }
 
-        $this->relationMethodName = Prefix::getRelationMethodName($this->tableName, $this->prefix);
+        $this->relationMethodName = MgPrefix::getRelationMethodName($this->tableName, $this->prefix);
         return $this->relationMethodName;
     }
     /**

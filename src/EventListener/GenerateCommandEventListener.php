@@ -1,8 +1,8 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\EventListener;
+namespace ModelGenerator\EventListener;
 
-use MaherAlyamany\ModelGenerator\TypeRegistry;
+use ModelGenerator\TypeRegistry;
 use Illuminate\Console\Events\CommandStarting;
 
 class GenerateCommandEventListener
@@ -20,7 +20,7 @@ class GenerateCommandEventListener
             return;
         }
         $this->typeRegistry->registerAllTypes();
-        $userTypes = config('model_generator.db_types', [])??[];
+        $userTypes = config('model-generator.db_types', [])??[];
 
         foreach ($userTypes as $type => $value) {
             $this->typeRegistry->registerType($type, $value);

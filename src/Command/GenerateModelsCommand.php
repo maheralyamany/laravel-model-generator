@@ -1,14 +1,14 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Command;
+namespace ModelGenerator\Command;
 
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Generator;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
+
+use ModelGenerator\Generator;
+
+use ModelGenerator\Helper\MgPrefix;
 use Illuminate\Console\Command;
 
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\Illuminate\MDbManager;
 
 use Symfony\Component\Console\Input\InputOption;
 
@@ -18,7 +18,7 @@ class GenerateModelsCommand extends Command
 
     protected $name = 'maheralyamany:generate:models';
 
-     public function __construct(protected Generator $generator,protected  MDbManager $mDbManager)
+    public function __construct(protected Generator $generator, protected  MDbManager $mDbManager)
     {
 
         parent::__construct();
@@ -27,25 +27,24 @@ class GenerateModelsCommand extends Command
 
     public function handle()
     {
-        $this->emptyPath();
         $config = $this->createConfig();
 
-        Prefix::setPrefix($this->mDbManager->connection($config->getConnection())->getTablePrefix());
+        MgPrefix::setPrefix($this->mDbManager->connection($config->getConnection())->getTablePrefix());
+
 
         $allowTables = $this->getAllowTables();
-        $skipTables = $this->option('skip-table');
-        $hasCreateMethod = $this->option('has-create');
-        // dd($hasCreateMethod,$this->option('has-create'));
-        $skipTables[] = 'migrations';
-        $skipTables[] = 'personal_access_tokens';
+        $skipTables = $this->option('skip-tables');
 
+        // dd($hasCreateMethod,$this->option('has-create'));
+      
+        $this->emptyPath($config);
         if (sizeof($allowTables) > 0) {
             foreach ($allowTables as $table) {
-                $tableName = Prefix::remove($table);
+                $tableName = MgPrefix::remove($table);
                 if (in_array($tableName, $skipTables)) {
                     continue;
                 }
-                $this->generateModel($config, $tableName, $hasCreateMethod);
+                $this->generateModel($config, $tableName);
             }
         } else {
             //$schemaManager = $this->mDbManager->connection($config->getConnection())->getDoctrineSchemaManager();
@@ -54,7 +53,7 @@ class GenerateModelsCommand extends Command
                 if (in_array($tableName, $skipTables)) {
                     continue;
                 }
-                $this->generateModel($config, $tableName, $hasCreateMethod);
+                $this->generateModel($config, $tableName);
             }
         }
     }
@@ -66,8 +65,8 @@ class GenerateModelsCommand extends Command
             $this->getCommonOptions(),
             [
                 ['allow-tables', 'at', InputOption::VALUE_OPTIONAL, 'Tables to  generate models', null],
-                ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', true],
-                ['skip-table', 'sk', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'Tables to skip generating models for', null],
+
+                ['skip-tables', 'sk', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'Tables to skip generating models for', config('model-generator.except')??[]],
             ],
         );
     }
