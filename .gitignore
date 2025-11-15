@@ -2,5 +2,5 @@
 .idea
 composer.lock
 .phpunit.result.cache
-composer.lock
-composer.lock
+.git_commands.md
+.phpunit.cache/test-results

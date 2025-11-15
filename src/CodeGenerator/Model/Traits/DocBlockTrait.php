@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits;
+namespace ModelGenerator\CodeGenerator\Model\Traits;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use ModelGenerator\CodeGenerator\Model\DocBlockModel;
 
 /**
  * Trait DocBlockTrait
- * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits
+ * @package ModelGenerator\CodeGenerator\Model\Traits
  */
 trait DocBlockTrait
 {

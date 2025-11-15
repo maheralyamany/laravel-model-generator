@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MaherAlyamany\ModelGenerator\Schema;
+namespace ModelGenerator\Illuminate;
 
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\DatabaseManager;
-
+use ModelGenerator\Illuminate\MySql\Schema as MySqlSchema;
 class MDbManager
 {
 
@@ -29,7 +29,7 @@ class MDbManager
   public  function get(): AbstractMSchemaManager
   {
     if (self::$instance === null) {
-      self::$instance = new MySqlDbPlatform($this->connection());
+      self::$instance = new MySqlSchema($this->connection());
     }
     return self::$instance;
   }

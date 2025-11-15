@@ -1,6 +1,6 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Model;
+namespace ModelGenerator\Model;
 
 class HasOne extends Relation
 {

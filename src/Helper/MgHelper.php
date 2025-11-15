@@ -1,11 +1,13 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Helper;
+namespace ModelGenerator\Helper;
 
 use Doctrine\DBAL\Schema\Table;
+use Exception;
 use Illuminate\Support\Str;
+use Throwable;
 
-class EmgHelper
+class MgHelper extends MgBaseHelper
 {
     public const DEFAULT_PRIMARY_KEY = 'id';
 
@@ -25,6 +27,15 @@ class EmgHelper
     {
         // return Str::studly($tableName);
         return Str::singular(Str::studly($tableName));
+    }
+    public static function normalizeNamespace(string $namespace): string
+    {
+        // استبدال كل الأنواع بعلامة واحدة /
+        $namespace = str_replace(['\\\\', '\\', '//', '/'], '/', $namespace);
+        // إزالة التكرار إن وجد
+        $namespace = preg_replace('#/+#', '/', $namespace);
+        // استبدال / بـ \
+        return str_replace('/', '\\', $namespace);
     }
 
     public static function getDefaultForeignColumnName(string $tableName): string

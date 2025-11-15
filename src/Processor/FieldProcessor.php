@@ -1,23 +1,22 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Processor;
+namespace ModelGenerator\Processor;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ArgumentModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseClassModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseTraitModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
-use MaherAlyamany\ModelGenerator\Config\MConfig;
-use MaherAlyamany\ModelGenerator\Helper\MFormatter;
-use MaherAlyamany\ModelGenerator\Helper\Prefix;
-use MaherAlyamany\ModelGenerator\Model\EloquentModel;
-use MaherAlyamany\ModelGenerator\TypeRegistry;
+use ModelGenerator\CodeGenerator\Model\ArgumentModel;
+use ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use ModelGenerator\CodeGenerator\Model\MethodModel;
+use ModelGenerator\CodeGenerator\Model\PropertyModel;
+use ModelGenerator\CodeGenerator\Model\UseClassModel;
+use ModelGenerator\CodeGenerator\Model\UseTraitModel;
+use ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
+use ModelGenerator\Config\MConfig;
 
-use Illuminate\Support\Facades\Config as Conf;
+use ModelGenerator\Model\EloquentModel;
+use ModelGenerator\TypeRegistry;
+
+
 use Illuminate\Support\Str;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\Illuminate\MDbManager;
 
 
 class FieldProcessor implements ProcessorInterface

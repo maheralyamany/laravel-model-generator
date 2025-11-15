@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator;
+namespace ModelGenerator\CodeGenerator;
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\GeneratorException;
+use ModelGenerator\CodeGenerator\Exception\GeneratorException;
 
 /**
  * Class RenderableModel
- * @package MaherAlyamany\ModelGenerator\CodeGenerator
+ * @package ModelGenerator\CodeGenerator
  */
 abstract class RenderableModel implements RenderableInterface, LineableInterface
 {

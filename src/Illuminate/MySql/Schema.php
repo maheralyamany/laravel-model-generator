@@ -1,31 +1,48 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Schema;
+declare(strict_types=1);
 
+namespace ModelGenerator\Illuminate\MySql;
+
+use ModelGenerator\Illuminate\AbstractMSchemaManager;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
+use Illuminate\Support\Facades\Schema as DbSchema;
+use ModelGenerator\CodeGenerator\Model\TableColumn;
+use ModelGenerator\Illuminate\BaseSchema;
 
-class OracleDbPlatform extends AbstractMSchemaManager
+class Schema extends AbstractMSchemaManager implements BaseSchema
 {
-    public function __construct(?Connection $connection=null)
-    {
-        parent::__construct($connection);
-    }
     /**
-     * The OracleDbPlatform instance in use.
+     * @var \Illuminate\Database\MySqlConnection
      */
-    private static ?OracleDbPlatform $instance = null;
-
+    protected $connection;
+    public function __construct(?\Illuminate\Database\ConnectionInterface $connection = null)
+    {
+        $this->connection = $connection ?? DB::connection();
+        parent::__construct();
+    }
+   
     /**
-     * Returns the OracleDbPlatform instance to use.
+     * @return \Illuminate\Database\MySqlConnection
+     */
+    public function connection()
+    {
+        return $this->connection;
+    }
+
+     /**
+     * The  instance in use.
+     */
+    private static ?self $instance = null;
+    /**
+     * Returns the off sself instance to use.
      *
      */
     public static function get(): self
     {
         if (self::$instance === null) {
-            self::$instance = new OracleDbPlatform();
+            self::$instance = new static();
         }
         return self::$instance;
     }
@@ -38,25 +55,25 @@ class OracleDbPlatform extends AbstractMSchemaManager
         //$instance = static::get();
         try {
             $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =  ?";
-            $db = $this->_conn->select($query, [$database]);
+            $db = $this->connection()->select($query, [$database]);
             if (empty($db)) {
                 return false;
             } else {
                 return true;
             }
         } catch (\Exception $e) {
-            
+
             return false;
         }
     }
 
-    public  function isValidConnection(string|null  $connectionName = null): string
+    public  function isValidConnection(string|null  $connectionName = null): bool
     {
-        $db = Schema::connection($connectionName)->getConnection()->getDatabaseName();
+        $db = DbSchema::connection($connectionName)->getConnection()->getDatabaseName();
         return $this->checkDataBaseExists($db);
     }
 
-   
+
     /**
      * {@inheritDoc}
      *
@@ -66,6 +83,7 @@ class OracleDbPlatform extends AbstractMSchemaManager
     {
         return 'SHOW DATABASES';
     }
+
     /**
      *
      *
@@ -80,7 +98,7 @@ class OracleDbPlatform extends AbstractMSchemaManager
         $database = $this->getDatabaseName($database);
         $tableNames = [];
         try {
-            $result = $this->_conn->select("SELECT t.TABLE_NAME from INFORMATION_SCHEMA.TABLES t WhERE t.TABLE_SCHEMA = '" . $database . "' AND t.TABLE_TYPE = 'BASE TABLE';");
+            $result = $this->connection()->select("SELECT t.TABLE_NAME from INFORMATION_SCHEMA.TABLES t WhERE t.TABLE_SCHEMA = '" . $database . "' AND t.TABLE_TYPE = 'BASE TABLE';");
             foreach ($result as $v) {
                 if (!is_null($v->TABLE_NAME)) {
                     if (!in_array($v->TABLE_NAME, $tableNames)) {
@@ -116,7 +134,7 @@ class OracleDbPlatform extends AbstractMSchemaManager
     public function getListTableIndexes($table, $database = null)
     {
         $query = $this->getListTableIndexesSQL($table, $database);
-        return $this->_conn->select($query);
+        return $this->connection()->select($query);
     }
     /**
      * {@inheritDoc}
@@ -178,12 +196,12 @@ class OracleDbPlatform extends AbstractMSchemaManager
     public function getListTableRelatedKeys($table, $database = null)
     {
         $query = $this->getListTableRelatedKeysSQL($table, $database);
-        return $this->_conn->select($query);
+        return $this->connection()->select($query);
     }
     public function getListTableForeignKeys($table, $database = null)
     {
         $query = $this->getListTableForeignKeysSQL($table, $database);
-        return $this->_conn->select($query);
+        return $this->connection()->select($query);
     }
     /**
      * chaek table has Column
@@ -195,22 +213,21 @@ class OracleDbPlatform extends AbstractMSchemaManager
      */
     public  function hasColumn(string $table, string $columnName, string $database = null): bool
     {
-        
+
         $database =  $this->getDatabaseName($database);
         $query = 'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA =' . $this->getDatabaseNameSQL($database) . '  AND TABLE_NAME =' . $this->quoteStringLiteral($table) . ' AND COLUMN_NAME=' . $this->quoteStringLiteral($columnName);
-        $data = collect($this->_conn->select($query));
+        $data = collect($this->connection()->select($query));
         return $data->count() > 0;
     }
     public  function hasTable(string $table, $database = null): bool
     {
-      
+
         $database = $this->getDatabaseName($database);
         try {
             $query = "SELECT t.TABLE_NAME FROM INFORMATION_SCHEMA.TABLES t WhERE t.TABLE_SCHEMA =" . $this->getDatabaseNameSQL($database) . "  AND t.TABLE_TYPE = 'BASE TABLE' AND t.TABLE_NAME=" . $this->quoteStringLiteral($table);
-            $data = collect($this->_conn->select($query));
+            $data = collect($this->connection()->select($query));
             return $data->count() > 0;
         } catch (\Throwable $th) {
-           
         }
         return false;
     }
@@ -247,12 +264,12 @@ class OracleDbPlatform extends AbstractMSchemaManager
     public function getListTableColumns($table, $database = null)
     {
         $query = $this->getListTableColumnsSQL($table, $database);
-        return collect($this->_conn->select($query))->mapWithKeys(fn($obj, $k) => [$k => TableColumn::new($obj)])->all();
+        return collect($this->connection()->select($query))->mapWithKeys(fn($obj, $k) => [$k => TableColumn::new($obj)])->all();
     }
     public function getGroupedListTableColumns($table, $database = null)
     {
         $query = $this->getListTableColumnsSQL($table, $database);
-        $columns = collect($this->_conn->select($query));
+        $columns = collect($this->connection()->select($query));
         $grouped = $columns->mapToGroups(function ($col) {
             return [$col->Field => $col];
         })->mapWithKeys(fn($x, $tableName) => [
@@ -298,8 +315,6 @@ SQL,
     public function getListTableMetadata(string $table, ?string $database = null)
     {
         $query = $this->getListTableMetadataSQL($table, $database);
-        return collect($this->_conn->select($query))->first();
+        return collect($this->connection()->select($query))->first();
     }
-
-   
 }

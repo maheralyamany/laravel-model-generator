@@ -1,11 +1,15 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Config;
+namespace ModelGenerator\Config;
 
 
 
 use Illuminate\Support\Facades\Config as BaseConfig;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use ModelGenerator\CodeGenerator\Exception\GeneratorException;
+use ModelGenerator\Helper\MgHelper;
+use ModelGenerator\Helper\MgPathHelper;
 
 class MConfig
 {
@@ -18,7 +22,9 @@ class MConfig
     private ?string $dateFormat = null;
     private ?string $connection = null;
     private ?string $databaseName = null;
+    private ?string $outputPath = null;
     private bool $hasCreateMethod = true;
+    private bool $hasOutputPath = false;
     private array $tablesNamespace = [];
 
     /**
@@ -52,14 +58,17 @@ class MConfig
         return $this;
     }
 
-    public function getNamespace(): ?string
+    public function getNamespace(): string
     {
         return $this->namespace;
     }
 
     public function setNamespace(?string $namespace): self
     {
-        $this->namespace = $namespace;
+        if (MgHelper::isEmpty($namespace)) {
+            $namespace = 'App\Models';
+        }
+        $this->namespace = MgHelper::normalizeNamespace($namespace);
 
         return $this;
     }
@@ -175,9 +184,7 @@ class MConfig
      */
     public function setHasCreateMethod($hasCreateMethod)
     {
-        if (is_string($hasCreateMethod))
-            $hasCreateMethod = $hasCreateMethod == 'true';
-        $this->hasCreateMethod = $hasCreateMethod;
+        $this->hasCreateMethod = MgHelper::parseBoolean($hasCreateMethod);
 
         return $this;
     }
@@ -198,6 +205,91 @@ class MConfig
     public function setTablesNamespace($tablesNamespace)
     {
         $this->tablesNamespace = $tablesNamespace;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of outputPath
+     */
+    public function getOutputPath(?string $tableName = null): string
+    {
+
+        $path = $this->outputPath;
+        if (MgHelper::isNotEmpty($tableName)) {
+            $sub_path = null;
+            $namespace = $this->getTableNamespace($tableName);
+            if (MgHelper::isNotEquals($namespace, $this->getNamespace()))
+                $sub_path = str_replace("App\\", '', $namespace);
+            if (MgHelper::isNotEmpty($sub_path)) {
+                $path = MgPathHelper::normalizePath($path . "/" . $sub_path);
+                MgPathHelper::ensureModelsDirectoryExists($path);
+            }
+        }
+        return  $path;
+    }
+
+
+    public  function getTableNamespace(?string $tableName): string
+    {
+        if (MgHelper::isEmpty($tableName)) {
+            return $this->getNamespace();
+        }
+        $tables = $this->getTablesNamespace();
+
+        if (key_exists($tableName, $tables)) {
+            $tableNamspace = $tables[$tableName];
+            if (MgHelper::isNotEmpty($tableNamspace)) {
+                return MgHelper::normalizeNamespace($tableNamspace);
+            }
+        }
+        return $this->getNamespace();
+    }
+    public function getUseNamespace(?string $tableName): string
+    {
+
+        if (MgHelper::isEmpty($tableName)) {
+            return '';
+        }
+
+        try {
+
+            $tableNamspace = $this->getTableNamespace($tableName);
+            $namespace = $this->getNamespace();
+            if (MgHelper::isNotEquals($tableNamspace, $namespace)) {
+                return $tableNamspace;
+            }
+
+            $useNamespace = 'App\Models';
+            if (MgHelper::isNotEquals($useNamespace, $namespace)) {
+                $tableName = MgHelper::getClassNameByTableName($tableName);
+                $useNamespace = MgHelper::normalizeNamespace($useNamespace . '\\' . $tableName);
+            } else {
+                $useNamespace = '';
+            }
+        } catch (\Throwable $th) {
+            dd($tableName);
+            throw $th;
+        }
+        return $useNamespace;
+    }
+    /**
+     * Set the value of outputPath
+     *
+     * @return  self
+     */
+    public function setOutputPath(?string $outputPath = null)
+    {
+        $this->hasOutputPath = MgHelper::isNotEmpty($outputPath);
+        if (!$this->hasOutputPath) {
+            $outputPath = app_path('Models');
+        }
+        $outputPath = MgPathHelper::normalizePath($outputPath);
+        MgPathHelper::ensureModelsDirectoryExists($outputPath);
+
+        $this->outputPath = $outputPath;
+
+
 
         return $this;
     }

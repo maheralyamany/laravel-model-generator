@@ -5,17 +5,18 @@ namespace unit\Helper;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Table;
 use Illuminate\Database\Eloquent\Model;
-use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
+use ModelGenerator\Helper\MgHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class EmgHelperTest extends TestCase
+class MgHelperTest extends TestCase
 {
     /**
      * @dataProvider fqcnProvider
      */
     public function testGetShortClassName(string $fqcn, string $expected): void
     {
-        $this->assertEquals($expected, EmgHelper::getShortClassName($fqcn));
+        $this->assertEquals($expected, MgHelper::getShortClassName($fqcn));
     }
 
     public function fqcnProvider(): array
@@ -32,7 +33,7 @@ class EmgHelperTest extends TestCase
      */
     public function testGetTableNameByClassName(string $className, string $expected): void
     {
-        $this->assertEquals($expected, EmgHelper::getTableNameByClassName($className));
+        $this->assertEquals($expected, MgHelper::getTableNameByClassName($className));
     }
 
     public function classNameProvider(): array
@@ -50,7 +51,7 @@ class EmgHelperTest extends TestCase
      */
     public function testGetClassNameByTableName(string $tableName, string $expected): void
     {
-        $this->assertEquals($expected, EmgHelper::getClassNameByTableName($tableName));
+        $this->assertEquals($expected, MgHelper::getClassNameByTableName($tableName));
     }
 
     public function tableNameToClassNameProvider(): array
@@ -68,7 +69,7 @@ class EmgHelperTest extends TestCase
      */
     public function testGetDefaultForeignColumnName(string $tableName, string $expected): void
     {
-        $this->assertEquals($expected, EmgHelper::getDefaultForeignColumnName($tableName));
+        $this->assertEquals($expected, MgHelper::getDefaultForeignColumnName($tableName));
     }
 
     public function tableNameToForeignColumnNameProvider(): array
@@ -85,7 +86,7 @@ class EmgHelperTest extends TestCase
      */
     public function testGetDefaultJoinTableName(string $tableNameOne, string $tableNameTwo, string $expected): void
     {
-        $this->assertEquals($expected, EmgHelper::getDefaultJoinTableName($tableNameOne, $tableNameTwo));
+        $this->assertEquals($expected, MgHelper::getDefaultJoinTableName($tableNameOne, $tableNameTwo));
     }
 
     public function tableNamesProvider(): array
@@ -109,13 +110,10 @@ class EmgHelperTest extends TestCase
             ->willReturn(true);
 
         $indexMocks = [$indexMock];
+        $tableMock = $this->createMockTable($indexMocks);
 
-        $tableMock = $this->createMock(Table::class);
-        $tableMock->expects($this->once())
-            ->method('getIndexes')
-            ->willReturn($indexMocks);
 
-        $this->assertTrue(EmgHelper::isColumnUnique($tableMock, 'column_0'));
+        $this->assertTrue(MgHelper::isColumnUnique($tableMock, 'column_0'));
     }
 
     public function testIsColumnUniqueTwoIndexColumns(): void
@@ -130,14 +128,19 @@ class EmgHelperTest extends TestCase
 
         $indexMocks = [$indexMock];
 
+        $tableMock = $this->createMockTable($indexMocks);
+
+
+        $this->assertFalse(MgHelper::isColumnUnique($tableMock, 'column_0'));
+    }
+    private function createMockTable($indexMocks): MockObject|Table
+    {
         $tableMock = $this->createMock(Table::class);
         $tableMock->expects($this->once())
             ->method('getIndexes')
             ->willReturn($indexMocks);
-
-        $this->assertFalse(EmgHelper::isColumnUnique($tableMock, 'column_0'));
+        return $tableMock;
     }
-
     public function testIsColumnUniqueIndexNotUnique(): void
     {
         $indexMock = $this->createMock(Index::class);
@@ -150,12 +153,9 @@ class EmgHelperTest extends TestCase
             ->willReturn(false);
 
         $indexMocks = [$indexMock];
+        $tableMock = $this->createMockTable($indexMocks);
 
-        $tableMock = $this->createMock(Table::class);
-        $tableMock->expects($this->once())
-            ->method('getIndexes')
-            ->willReturn($indexMocks);
 
-        $this->assertFalse(EmgHelper::isColumnUnique($tableMock, 'column_0'));
+        $this->assertFalse(MgHelper::isColumnUnique($tableMock, 'column_0'));
     }
 }

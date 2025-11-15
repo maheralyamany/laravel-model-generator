@@ -1,8 +1,8 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\Helper;
+namespace ModelGenerator\Helper;
 
-class Prefix
+class MgPrefix
 {
     private static ?string $prefix = null;
     public static $shortMethodNames = [
@@ -28,10 +28,10 @@ class Prefix
     }
     public static function getRelationMethodName(string $tableName, string $prefix): string
     {
-        if (key_exists($tableName, Prefix::$shortMethodNames)) {
-            return Prefix::$shortMethodNames[$tableName];
+        if (key_exists($tableName, self::$shortMethodNames)) {
+            return self::$shortMethodNames[$tableName];
         }
-        return Prefix::removeRelation($tableName, $prefix);
+        return self::removeRelation($tableName, $prefix);
 
     }
     public static function removeRelation(string $tableName, string $prefix): string

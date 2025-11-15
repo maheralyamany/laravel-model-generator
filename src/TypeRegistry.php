@@ -1,10 +1,10 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator;
+namespace ModelGenerator;
 
 
 
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\Illuminate\MDbManager;
 
 class TypeRegistry
 {

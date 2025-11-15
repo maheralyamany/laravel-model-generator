@@ -1,18 +1,18 @@
 <?php
 
-namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
+namespace ModelGenerator\CodeGenerator\Model;
 
 
-use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\GeneratorException;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
-use MaherAlyamany\ModelGenerator\CodeGenerator\RenderableModel;
-use MaherAlyamany\ModelGenerator\CodeGenerator\Model\TableColumn;
-use MaherAlyamany\ModelGenerator\Model\Relation;
-use MaherAlyamany\ModelGenerator\Schema\MDbManager;
+use ModelGenerator\CodeGenerator\Exception\GeneratorException;
+use ModelGenerator\CodeGenerator\Model\Traits\DocBlockTrait;
+use ModelGenerator\CodeGenerator\RenderableModel;
+use ModelGenerator\CodeGenerator\Model\TableColumn;
+use ModelGenerator\Model\Relation;
+use ModelGenerator\Illuminate\MDbManager;
 
 /**
  * Class ClassModel
- * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
+ * @package ModelGenerator\CodeGenerator\Model
  */
 class ClassModel extends RenderableModel
 {
@@ -393,7 +393,7 @@ class ClassModel extends RenderableModel
      */
     public function getBelongsToManyRelations()
     {
-        return collect($this->cascadeRelations)->filter(fn($r) => ($r::class === 'MaherAlyamany\ModelGenerator\Model\BelongsToMany'))->toArray();
+        return collect($this->cascadeRelations)->filter(fn($r) => ($r::class === 'ModelGenerator\Model\BelongsToMany'))->toArray();
     }
     /**
      *
@@ -401,7 +401,7 @@ class ClassModel extends RenderableModel
      */
     public function getCascadeAndBelongsToRelation()
     {
-        $relarions = collect($this->cascadeRelations)->filter(fn(Relation $r) => ($r::class === 'MaherAlyamany\ModelGenerator\Model\BelongsTo' && $r->getIsCascade()));
+        $relarions = collect($this->cascadeRelations)->filter(fn(Relation $r) => ($r::class === 'ModelGenerator\Model\BelongsTo' && $r->getIsCascade()));
         if ($relarions->count() == 1)
             return $relarions->first();
         return null;
