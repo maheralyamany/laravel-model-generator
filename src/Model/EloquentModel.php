@@ -2,10 +2,10 @@
 
 namespace MaherAlyamany\ModelGenerator\Model;
 
-use MaherAlyamany\CodeGenerator\Model\ClassModel;
-use MaherAlyamany\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\CodeGenerator\Model\VirtualPropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ClassModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
 use MaherAlyamany\ModelGenerator\Exception\GeneratorException;
 use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as EloquentBelongsTo;

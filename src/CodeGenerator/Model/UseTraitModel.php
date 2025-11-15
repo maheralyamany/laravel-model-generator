@@ -1,12 +1,12 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\CodeGenerator\RenderableModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\RenderableModel;
 
 /**
  * Class PHPClassTrait
- * @package MaherAlyamany\CodeGenerator\Model
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
  */
 class UseTraitModel extends RenderableModel
 {

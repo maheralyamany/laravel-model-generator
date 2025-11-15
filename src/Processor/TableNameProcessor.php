@@ -3,11 +3,11 @@
 namespace MaherAlyamany\ModelGenerator\Processor;
 
 
-use MaherAlyamany\CodeGenerator\Exception\GeneratorException;
-use MaherAlyamany\CodeGenerator\Model\ClassNameModel;
-use MaherAlyamany\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\CodeGenerator\Model\UseClassModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\GeneratorException;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ClassNameModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseClassModel;
 use MaherAlyamany\ModelGenerator\Config\MConfig;
 use MaherAlyamany\ModelGenerator\Helper\EmgHelper;
 use MaherAlyamany\ModelGenerator\Helper\Prefix;

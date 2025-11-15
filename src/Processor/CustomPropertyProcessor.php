@@ -2,8 +2,8 @@
 
 namespace MaherAlyamany\ModelGenerator\Processor;
 
-use MaherAlyamany\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\CodeGenerator\Model\PropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
 use MaherAlyamany\ModelGenerator\Config\MConfig;
 use MaherAlyamany\ModelGenerator\Model\EloquentModel;
 

@@ -2,13 +2,13 @@
 
 namespace MaherAlyamany\ModelGenerator\Processor;
 
-use MaherAlyamany\CodeGenerator\Model\ArgumentModel;
-use MaherAlyamany\CodeGenerator\Model\DocBlockModel;
-use MaherAlyamany\CodeGenerator\Model\MethodModel;
-use MaherAlyamany\CodeGenerator\Model\PropertyModel;
-use MaherAlyamany\CodeGenerator\Model\UseClassModel;
-use MaherAlyamany\CodeGenerator\Model\UseTraitModel;
-use MaherAlyamany\CodeGenerator\Model\VirtualPropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\ArgumentModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\DocBlockModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\MethodModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\PropertyModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseClassModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\UseTraitModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\VirtualPropertyModel;
 use MaherAlyamany\ModelGenerator\Config\MConfig;
 use MaherAlyamany\ModelGenerator\Helper\MFormatter;
 use MaherAlyamany\ModelGenerator\Helper\Prefix;

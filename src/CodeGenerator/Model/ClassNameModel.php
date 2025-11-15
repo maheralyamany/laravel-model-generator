@@ -1,15 +1,15 @@
 <?php
 
-namespace MaherAlyamany\CodeGenerator\Model;
+namespace MaherAlyamany\ModelGenerator\CodeGenerator\Model;
 
-use MaherAlyamany\CodeGenerator\Exception\ValidationException;
-use MaherAlyamany\CodeGenerator\Model\Traits\AbstractModifierTrait;
-use MaherAlyamany\CodeGenerator\Model\Traits\FinalModifierTrait;
-use MaherAlyamany\CodeGenerator\RenderableModel;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Exception\ValidationException;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\AbstractModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\Model\Traits\FinalModifierTrait;
+use MaherAlyamany\ModelGenerator\CodeGenerator\RenderableModel;
 
 /**
  * Class Name
- * @package MaherAlyamany\CodeGenerator\Model
+ * @package MaherAlyamany\ModelGenerator\CodeGenerator\Model
  */
 class ClassNameModel extends RenderableModel
 {
