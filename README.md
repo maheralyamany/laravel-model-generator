@@ -1,19 +1,36 @@
-# Laravel Model Generator
+<h1 align="center">Laravel Model Generator</h1>
 
-<p align="center"> <a href="https://how-to-help-ukraine-now.super.site" target="_blank"> <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/313/flag-ukraine_1f1fa-1f1e6.png" alt="Ukraine" width="50" height="50"/> </a>
+<p align="center">
+    <img src="https://img.shields.io/packagist/v/maheralyamany/laravel-model-generator" alt="Latest Version">
+    <img src="https://img.shields.io/packagist/dt/maheralyamany/laravel-model-generator" alt="Total Downloads">
+    <img src="https://img.shields.io/packagist/l/maheralyamany/laravel-model-generator" alt="License">
+    <img src="https://img.shields.io/github/stars/maheralyamany/laravel-model-generator" alt="Stars">
+</p>
 
-Laravel Model Generator generates Eloquent models using database schema as a source.
 
 
-## Installation
+
+<p align="center">Laravel Model Generator generates Eloquent models using database schema as a source.
+</p>
+
+## 📋 Requirements
+
+- PHP ^8.1 or higher
+- Laravel 10.x or higher
+- Composer
+
+
+## 🚀 Installation
+
 Step 1. Add Laravel Model Generator to your project:
-``` shell
+``` bash
 composer require maheralyamany/laravel-model-generator --dev
 ```
+### Publish Configuration
 
 Add the `model-generator.php` configuration file to your `config` directory and clear the config cache:
 
-```shell
+```bash
 php artisan vendor:publish --tag=model-generator
 
 # Let's refresh our config cache just in case
@@ -41,7 +58,7 @@ Step 3. Configure your database connection.
 
 Use
 
-```shell
+```bash
 php artisan maheralyamany:generate:model User
 ```
 
@@ -51,7 +68,7 @@ to generate a model class. Generator will look for table named `users` and gener
 
 Use `table-name` option to specify another table name:
 
-```shell
+```bash
 php artisan maheralyamany:generate:model Cache --table-name=cache
 ```
 
@@ -61,10 +78,10 @@ In this case generated model will contain `protected $table = 'user'` property.
 
 Generated file will be saved into `app/Models` directory of your application and have `App\Models` namespace by default. If you want to change the destination and namespace, supply the `output-path` and `namespace` options respectively:
 
-```shell
+```bash
 php artisan maheralyamany:generate:model User --output-path=/full/path/to/output/directory --namespace=Your\\Custom\\Models\\Place
 ```
-```shell
+```bash
 php artisan maheralyamany:generate:models  --allow-tables='table_name'  --has-create='true' 
 
 php artisan maheralyamany:generate:models  --allow-tables='table_name'  --has-create='true' 
@@ -81,7 +98,7 @@ php artisan maheralyamany:generate:models   --has-create='false'
 
 By default, generated class will be extended from `Illuminate\Database\Eloquent\Model`. To change the base class specify `base-class-name` option:
 
-```shell
+```bash
 php artisan maheralyamany:generate:model User --base-class-name=Custom\\Base\\Model
 ```
 
@@ -89,7 +106,7 @@ php artisan maheralyamany:generate:model User --base-class-name=Custom\\Base\\Mo
 
 If `User.php` file already exist, it will be renamed into `User.php~` first and saved at the same directory. Unless `no-backup` option is specified:
 
-```shell
+```bash
 php artisan maheralyamany:generate:model User --no-backup
 ```
 
@@ -162,7 +179,7 @@ CREATE TABLE `users` (
 
 Command:
 
-```shell
+```bash
 php artisan maheralyamany:generate:model User
 ```
 

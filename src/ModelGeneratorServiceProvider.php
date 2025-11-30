@@ -39,12 +39,10 @@ class ModelGeneratorServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-
             // Publish config
             $this->publishes([
                 __DIR__ . '/../config/model-generator.php' => config_path('model-generator.php'),
             ], 'model-generator');
-
             $this->commands([
                 GenerateModelCommand::class,
                 GenerateModelsCommand::class,
