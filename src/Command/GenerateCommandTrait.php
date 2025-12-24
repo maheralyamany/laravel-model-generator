@@ -84,7 +84,7 @@ trait GenerateCommandTrait
             ['no-timestamps', 'ts', InputOption::VALUE_OPTIONAL, 'Set timestamps property to false', config('model-generator.no_timestamps', false)],
             ['date-format', 'df', InputOption::VALUE_OPTIONAL, 'dateFormat property', config('model-generator.date_format')],
             ['connection', 'cn', InputOption::VALUE_OPTIONAL, 'Connection property', config('model-generator.connection')],
-            ['has-backup', 'b', InputOption::VALUE_OPTIONAL, 'Backup existing model', config('model-generator.no_backup', false)],
+            ['has-backup', 'b', InputOption::VALUE_OPTIONAL, 'Backup existing model', config('model-generator.has_backup', false)],
             ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', false],
         ];
     }
