@@ -83,7 +83,7 @@ class MgPathHelper
     $path = self::normalizePathOrUrl($path);
     $directory = self::getPathDirectory($path);
     if (!self::isDirectory($directory)) {
-      if (static::makeDirectory($directory, $mode, $recursive, $force)) {
+      if (!static::makeDirectory($directory, $mode, $recursive, $force)) {
         throw new GeneratorException(sprintf('Could not create directory %s', $directory));
       }
     }

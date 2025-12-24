@@ -25,6 +25,7 @@ class MConfig
     private ?string $outputPath = null;
     private bool $hasCreateMethod = true;
     private bool $hasOutputPath = false;
+    private bool $hasBackup = false;
     private array $tablesNamespace = [];
 
     /**
@@ -33,6 +34,22 @@ class MConfig
     public function __construct()
     {
         $this->tablesNamespace = config('models_namespaces', []);
+    }
+    public static function new(\Illuminate\Console\Command $command): self
+    {
+        $config = new MConfig();
+        //$config->setTableName($command->option('table-name'));
+        $config->setNamespace($command->option('namespace'));
+        $config->setHasCreateMethod($command->option('has-create'));
+        $config->setBaseClassName($command->option('base-class-name'));
+        $config->setNoTimestamps($command->option('no-timestamps'));
+        $config->setDateFormat($command->option('date-format'));
+        $config->setPrefix($command->option('prefix'));
+        $config->setOutputPath($command->option('output-path'));
+        $config->setConnection($command->option('connection'));
+        $config->setHasBackup($command->option('has-backup') ?? false);
+
+        return  $config;
     }
     public function getClassName(): ?string
     {
@@ -290,6 +307,26 @@ class MConfig
         $this->outputPath = $outputPath;
 
 
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hasBackup
+     */
+    public function getHasBackup(): bool
+    {
+        return $this->hasBackup;
+    }
+
+    /**
+     * Set the value of hasBackup
+     *
+     * @return  self
+     */
+    public function setHasBackup($hasBackup)
+    {
+        $this->hasBackup = MgHelper::parseBoolean($hasBackup);
 
         return $this;
     }

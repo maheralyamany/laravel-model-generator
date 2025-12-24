@@ -35,7 +35,7 @@ class GenerateModelsCommand extends Command
         $allowTables = $this->getAllowTables();
         $skipTables = $this->option('skip-tables');
 
-        // dd($hasCreateMethod,$this->option('has-create'));
+       
       
         $this->emptyPath($config);
         if (sizeof($allowTables) > 0) {
