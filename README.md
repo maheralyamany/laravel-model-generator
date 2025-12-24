@@ -59,17 +59,17 @@ Step 3. Configure your database connection.
 Use
 
 ```bash
-php artisan maheralyamany:generate:model User
+php artisan maheralyamany:generate:model table_name
 ```
 
 to generate a model class. Generator will look for table named `users` and generate a model for it.
 
-### table-name
+### class-name
 
-Use `table-name` option to specify another table name:
+Use `class-name` option to specify  model class name:
 
 ```bash
-php artisan maheralyamany:generate:model Cache --table-name=cache
+php artisan maheralyamany:generate:model cache --class-name=Cache
 ```
 
 In this case generated model will contain `protected $table = 'user'` property.
@@ -81,6 +81,43 @@ Generated file will be saved into `app/Models` directory of your application and
 ```bash
 php artisan maheralyamany:generate:model User --output-path=/full/path/to/output/directory --namespace=Your\\Custom\\Models\\Place
 ```
+
+### has-create
+
+Set `--has-create='true'` if you want to add create or update `createOrUpdate` function in the model like
+```php
+<?php
+
+ /**
+     * create or update model
+     *  @param \Illuminate\Http\Request|object|\stdClass $request
+     * @param static $item
+     * @return array
+     */
+    public static function createOrUpdate($request,  $item =null)
+    {
+        try {
+            if (is_null($item)) {
+                $item = static::Create([
+                    'name' => $request->name ,
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'role_id' => $request->role_id,
+                ]);
+            } else {
+                 $item->name = $request->name;
+                 $item->username = $request->username;
+                 $item->email = $request->email;
+                 $item->role_id = $request->role_id;
+                 $item->save();
+            }
+            return ["status" => true];
+        } catch (\Exception $ex) {
+            return  ["status" => false];
+        }
+    }
+```
+ 
 ```bash
 php artisan maheralyamany:generate:models  --allow-tables='table_name'  --has-create='true' 
 
@@ -102,12 +139,12 @@ By default, generated class will be extended from `Illuminate\Database\Eloquent\
 php artisan maheralyamany:generate:model User --base-class-name=Custom\\Base\\Model
 ```
 
-### no-backup
+### has-backup
 
-If `User.php` file already exist, it will be renamed into `User.php~` first and saved at the same directory. Unless `no-backup` option is specified:
+If `User.php` file already exist, it will be renamed into `User.php~` first and saved at the same directory. Unless `has-backup` option is specified:
 
 ```bash
-php artisan maheralyamany:generate:model User --no-backup
+php artisan maheralyamany:generate:model User --has-backup=true
 ```
 
 ### Other options

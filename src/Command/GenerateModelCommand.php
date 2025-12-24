@@ -23,19 +23,22 @@ class GenerateModelCommand extends Command
 
     public function handle()
     {
+
         $config = $this->createConfig();
-        $config->setClassName($this->argument('class-name'));
-       
+        $tableName=$this->argument('table-name');
+        $className=$this->option('class-name')??MgHelper::getClassNameByTableName($tableName);
+        $config->setClassName($className);
+
         MgPrefix::setPrefix($this->mDbManager->connection($config->getConnection())->getTablePrefix());
 
-        $tableName = $config->getTableName() ?? MgHelper::getTableNameByClassName($config->getClassName());
+        //$tableName = $config->getTableName() ?? MgHelper::getTableNameByClassName($config->getClassName());
         $this->generateModel($config, $tableName);
     }
 
     protected function getArguments()
     {
         return [
-            ['class-name', InputArgument::REQUIRED, 'Model class name'],
+            ['table-name', InputArgument::REQUIRED, 'Name of the table to use'],
         ];
     }
  protected function getOptions()
@@ -43,6 +46,7 @@ class GenerateModelCommand extends Command
         return array_merge(
             $this->getCommonOptions(),
             [
+                ['class-name', 'cln', InputOption::VALUE_OPTIONAL, 'Name of the model class name', null],
             ],
         );
     }

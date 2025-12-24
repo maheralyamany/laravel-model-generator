@@ -14,20 +14,12 @@ use ModelGenerator\Helper\MgPathHelper;
 
 trait GenerateCommandTrait
 {
-   
+
 
     protected function createConfig(): MConfig
     {
-        return (new MConfig())
-            ->setTableName($this->option('table-name'))
-            ->setNamespace($this->option('namespace'))
-            ->setHasCreateMethod($this->option('has-create'))
-            ->setBaseClassName($this->option('base-class-name'))
-            ->setNoTimestamps($this->option('no-timestamps'))
-            ->setDateFormat($this->option('date-format'))
-            ->setPrefix($this->option('prefix'))
-            ->setOutputPath($this->option('output-path'))
-            ->setConnection($this->option('connection'));
+
+        return MConfig::new($this);
     }
     protected function setPrefix($config)
     {
@@ -49,7 +41,8 @@ trait GenerateCommandTrait
     {
         try {
             $config->setTableName($tableName);
-            $config->setClassName(MgHelper::getClassNameByTableName($tableName));
+            if (is_null($config->getClassName()))
+                $config->setClassName(MgHelper::getClassNameByTableName($tableName));
             $config->setNamespace($config->getTableNamespace($tableName));
 
             $model = $this->generator->generateModel($config);
@@ -65,7 +58,7 @@ trait GenerateCommandTrait
         $content = $model->render();
 
         $outputFilepath = $config->getOutputPath($tableName) . '/' . $model->getName()->getName() . '.php';
-        if (!$this->option('no-backup') && file_exists($outputFilepath)) {
+        if ($config->getHasBackup() && file_exists($outputFilepath)) {
             rename($outputFilepath, $outputFilepath . '~');
         }
         file_put_contents($outputFilepath, $content);
@@ -83,7 +76,7 @@ trait GenerateCommandTrait
     protected function getCommonOptions(): array
     {
         return [
-            ['table-name', 'tn', InputOption::VALUE_OPTIONAL, 'Name of the table to use', null],
+
             ['prefix', 'pr', InputOption::VALUE_OPTIONAL, 'prefix of the table to use', ''],
             ['output-path', 'op', InputOption::VALUE_OPTIONAL, 'Directory to store generated model', config('model-generator.output_path')],
             ['namespace', 'ns', InputOption::VALUE_OPTIONAL, 'Namespace of the model', config('model-generator.namespace', 'App\Models')],
@@ -91,8 +84,8 @@ trait GenerateCommandTrait
             ['no-timestamps', 'ts', InputOption::VALUE_OPTIONAL, 'Set timestamps property to false', config('model-generator.no_timestamps', false)],
             ['date-format', 'df', InputOption::VALUE_OPTIONAL, 'dateFormat property', config('model-generator.date_format')],
             ['connection', 'cn', InputOption::VALUE_OPTIONAL, 'Connection property', config('model-generator.connection')],
-            ['no-backup', 'b', InputOption::VALUE_OPTIONAL, 'Backup existing model', config('model-generator.no_backup', true)],
-            ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', true],
+            ['has-backup', 'b', InputOption::VALUE_OPTIONAL, 'Backup existing model', config('model-generator.no_backup', false)],
+            ['has-create', 'hc', InputOption::VALUE_OPTIONAL, 'has create Method', false],
         ];
     }
 }
