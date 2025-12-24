@@ -169,7 +169,7 @@ return [
     'no_timestamps' => false,
     'date_format' => 'Y-m-d H:i:s',
     'connection' => null,
-    'no_backup' => null,
+    'has_backup' => null,
     'db_types' => [],
     'except' => [
       'migrations',
